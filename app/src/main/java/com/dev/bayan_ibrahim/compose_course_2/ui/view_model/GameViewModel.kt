@@ -47,13 +47,6 @@ class GameViewModel: ViewModel() {
                 wrongGuess = false,
             )
         }
-
-        Log.d(
-            TAG,
-            "current word: $currentWord\n" +
-                    "current scrambled word: $scrambledWord\n" +
-                    "current word index: $index\n"
-        )
     }
     private fun endGame() {
         _gameUiState.update {
