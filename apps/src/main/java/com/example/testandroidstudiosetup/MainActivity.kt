@@ -1,4 +1,4 @@
-package com.dev.bayan_ibrahim.compose_course_2
+package com.example.testandroidstudiosetup
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,19 +10,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.dev.bayan_ibrahim.compose_course_2.ui.theme.ComposeCourse_2Theme
+import com.example.testandroidstudiosetup.ui.theme.TestAndroidStudioSetupTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeCourse_2Theme {
+            TestAndroidStudioSetupTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    OrderLunchTrayApp()
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+                    Greeting("Android")
                 }
             }
         }
@@ -37,7 +34,7 @@ fun Greeting(name: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    ComposeCourse_2Theme {
+    TestAndroidStudioSetupTheme {
         Greeting("Android")
     }
 }
