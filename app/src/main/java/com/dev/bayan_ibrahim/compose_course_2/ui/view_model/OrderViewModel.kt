@@ -1,91 +1,58 @@
 package com.dev.bayan_ibrahim.compose_course_2.ui.view_model
 
 import androidx.lifecycle.ViewModel
-import com.dev.bayan_ibrahim.compose_course_2.data.PRICE_FOR_SAME_DAY_PICKUP
-import com.dev.bayan_ibrahim.compose_course_2.data.PRICE_PER_CUPCAKE
+import com.dev.bayan_ibrahim.compose_course_2.domain.MenuItem
 import com.dev.bayan_ibrahim.compose_course_2.domain.OrderUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.text.SimpleDateFormat
-import java.util.*
 
 class OrderViewModel: ViewModel() {
-    /**
-     * Cupcake state for this order
-     */
-    private val _uiState = MutableStateFlow(OrderUiState(pickupOptions = pickupOptions()))
-    val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
 
-    /**
-     * Set the quantity [numberCupcakes] of cupcakes for this order's state and update the price
-     */
-    fun setQuantity(numberCupcakes: Int) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                quantity = numberCupcakes,
-                price = calculatePrice(quantity = numberCupcakes)
+    private val _orderUiState = MutableStateFlow<OrderUiState>(OrderUiState())
+    val orderUiState: StateFlow<OrderUiState> = _orderUiState
+
+    private var entreePrice: Double = 0.0
+    private var sideDishPrice: Double = 0.0
+    private var accompanimentPrice: Double = 0.0
+
+
+    fun setEntree(entree: MenuItem.EntreeItem) {
+        entreePrice = entree.price
+        _orderUiState.update {
+            it.copy(
+                entree = entree,
+                itemTotalPrice = calculateTotalPrice()
             )
         }
     }
-
-    /**
-     * Set the [desiredFlavor] of cupcakes for this order's state.
-     * Only 1 flavor can be selected for the whole order.
-     */
-    fun setFlavor(desiredFlavor: String) {
-        _uiState.update { currentState ->
-            currentState.copy(flavor = desiredFlavor)
-        }
-    }
-
-    /**
-     * Set the [pickupDate] for this order's state and update the price
-     */
-    fun setDate(pickupDate: String) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                date = pickupDate,
-                price = calculatePrice(pickupDate = pickupDate)
+    fun setSideDish(sideDish: MenuItem.SideDishItem) {
+        sideDishPrice = sideDish.price
+        _orderUiState.update {
+            it.copy(
+                sideDish = sideDish,
+                itemTotalPrice = calculateTotalPrice()
             )
         }
     }
-
-    /**
-     * Reset the order state
-     */
-    fun resetOrder() {
-        _uiState.value = OrderUiState(pickupOptions = pickupOptions())
-    }
-
-    /**
-     * Returns the calculated price based on the order details.
-     */
-    private fun calculatePrice(
-        quantity: Int = _uiState.value.quantity,
-        pickupDate: String = _uiState.value.date
-    ): Float {
-        var calculatedPrice = quantity * PRICE_PER_CUPCAKE
-        // If the user selected the first option (today) for pickup, add the surcharge
-        if (pickupOptions()[0] == pickupDate) {
-            calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
+    fun setAccompaniment(accompaniment: MenuItem.AccompanimentItem) {
+        accompanimentPrice = accompaniment.price
+        _orderUiState.update {
+            it.copy(
+                accompaniment = accompaniment,
+                itemTotalPrice = calculateTotalPrice()
+            )
         }
-        return calculatedPrice
     }
-
-    /**
-     * Returns a list of date options starting with the current date and the following 3 dates.
-     */
-    private fun pickupOptions(): List<String> {
-        val dateOptions = mutableListOf<String>()
-        val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        // add current date and the following 3 dates.
-        repeat(4) {
-            dateOptions.add(formatter.format(calendar.time))
-            calendar.add(Calendar.DATE, 1)
-        }
-        return dateOptions
+    fun resetOrder(): Unit {
+        _orderUiState.value = OrderUiState()
+    }
+    fun submitOrder() {
+        // do nothing now
+        // TODO do something
+        resetOrder()
+    }
+    private fun calculateTotalPrice(): Double {
+        return  entreePrice + sideDishPrice + accompanimentPrice
     }
 }
