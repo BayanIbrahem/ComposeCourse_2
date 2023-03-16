@@ -12,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.dev.bayan_ibrahim.compose_course_2.ui.PlacesApp
 import com.dev.bayan_ibrahim.compose_course_2.ui.theme.ComposeCourse_2Theme
 
 class MainActivity : ComponentActivity() {
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val windowScreen = calculateWindowSizeClass(activity = this)
-                    SportsApp(windowSize = windowScreen.widthSizeClass)
+                    PlacesApp(windowSize = windowScreen.widthSizeClass)
                 }
             }
         }
